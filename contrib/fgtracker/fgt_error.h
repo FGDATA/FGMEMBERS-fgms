@@ -12,7 +12,7 @@
 
 #include    "fgt_common.h"
 #include    <stdarg.h>          /* ANSI C header file */ 
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 #include    <syslog.h>          /* for syslog() */ 
 #endif // !_MSC_VER
 

@@ -34,7 +34,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <string.h>
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 	#ifndef __FreeBSD__
 		#include <endian.h>
 	#endif
@@ -49,9 +49,11 @@
 #include "fg_common.hxx"
 #include "fg_util.hxx"
 
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 	#include <conio.h> // for _kbhit(), _getch
+#ifndef __MINGW32__
 	typedef int pid_t;
+#endif
 #else
 	cDaemon Myself;
 #endif
@@ -86,7 +88,7 @@ extern void SigHUPHandler ( int SigType );
 	static FILE* msg_file = NULL;
 #endif // #ifdef ADD_TRACKER_LOG
 
-#if _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 	static char* exit_file   = ( char* ) DEF_EXIT_FILE; // "fgms_exit"
 	static char* reset_file  = ( char* ) DEF_RESET_FILE; // "fgms_reset"
 	static char* stat_file   = ( char* ) DEF_STAT_FILE; // "fgms_stat"
@@ -897,7 +899,7 @@ FG_SERVER::AddCrossfeed
 )
 {
 	string s = Server;
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 	if ( s == "localhost" )
 	{
 		s = "127.0.0.1";
@@ -1559,7 +1561,7 @@ FG_SERVER::check_files
 		}
 		Show_Stats();
 	}
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 	if (!AddCLI && _kbhit())
 	{
 		int ch = _getch ();
@@ -1611,7 +1613,7 @@ FG_SERVER::Loop
 		           << "not listening on any socket!" );
 		return ( ERROR_NOT_LISTENING );
 	}
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 	SG_LOG ( SG_FGMS, SG_ALERT,  "ESC key to EXIT (after select " << m_PlayerExpires << " sec timeout)." );
 #endif
 	if ( (m_AdminUser == "" ) || (m_AdminPass == "") )

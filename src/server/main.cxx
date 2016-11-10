@@ -33,7 +33,7 @@
 #endif
 
 #include <cstdlib>
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 #include <sys/wait.h>
 #endif
 #include <signal.h>
@@ -50,7 +50,7 @@ FG_SERVER       Servant;
 /** @brief Flag whether instance is a Daemon  */
 extern  bool    RunAsDaemon;
 extern  bool    AddCLI;
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 #define M_IS_DIR _S_IFDIR
 #else // !_MSC_VER
 #define M_IS_DIR S_IFDIR
@@ -79,7 +79,7 @@ static bool     bHadConfig = false;
 #define DEF_LOG_LEVEL SG_INFO
 #endif
 #ifndef DEF_LOG_CLASS
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 #define DEF_LOG_CLASS (SG_FGMS|SG_FGTRACKER|SG_CONSOLE)
 #else
 #define DEF_LOG_CLASS (SG_FGMS|SG_FGTRACKER)
@@ -117,7 +117,7 @@ PrintHelp ()
 } // PrintHelp ()
 //////////////////////////////////////////////////////////////////////
 
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 // kludge for getopt() for WIN32
 static char* optarg;
 static int curr_arg = 0;
@@ -555,7 +555,7 @@ int
 ReadConfigs ( bool ReInit = false )
 {
 	string Path;
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 	Path = SYSCONFDIR;
 	Path += "/" DEF_CONF_FILE; // fgms.conf
 	if ( ProcessConfig ( Path ) == true )
@@ -625,7 +625,7 @@ void SigHUPHandler ( int SigType )
 		SG_LOG ( SG_SYSTEMS, SG_ALERT, "received HUP signal, but reinit failed!" );
 		exit ( 1 );
 	}
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 	signal ( SigType, SigHUPHandler );
 #endif
 } // SigHUPHandler ()
@@ -641,7 +641,7 @@ int
 main ( int argc, char* argv[] )
 {
 	int     I;
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 	signal ( SIGHUP, SigHUPHandler );
 #endif
 	ParseParams ( argc, argv );
@@ -651,7 +651,7 @@ main ( int argc, char* argv[] )
 		SG_LOG ( SG_SYSTEMS, SG_ALERT, "No configuration file '" << DEF_CONF_FILE << "' found!" );
 		exit ( 1 );
 	}
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 	if ( RunAsDaemon )
 	{
 		Myself.Daemonize ();

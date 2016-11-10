@@ -67,7 +67,7 @@
 #include <string>
 #include <server/fg_util.hxx>
 
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 	static int recoverable_wsa_error()
 	{
 	    int wsa_errno = WSAGetLastError();

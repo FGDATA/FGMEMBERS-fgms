@@ -80,7 +80,7 @@ static char *pgoptions = (char *)"";
 static char *pgtty = (char *)"";
 #endif // NO_POSTGRESQL
 
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 #define pid_t int
 int getpid(void) {
     return (int)GetCurrentThreadId();

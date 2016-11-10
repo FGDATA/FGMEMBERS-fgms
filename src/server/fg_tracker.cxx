@@ -26,7 +26,7 @@
 #include <string>
 #include <string.h>
 #include <sstream>
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
 #include <sys/timeb.h>
 #else
 #include <errno.h>
@@ -37,8 +37,8 @@
 #include <sys/msg.h>
 #include <sys/types.h>
 #include <signal.h>
-#endif
 #include <unistd.h>
+#endif
 #include <stdio.h>
 #include "fg_common.hxx"
 #include "fg_tracker.hxx"

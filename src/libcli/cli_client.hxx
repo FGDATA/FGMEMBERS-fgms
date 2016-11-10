@@ -23,7 +23,7 @@
 #include <sstream>
 #include <iomanip>
 #include <plib/netSocket.h>
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 	#include <termios.h>
 #endif
 #include "common.hxx"
@@ -79,7 +79,7 @@ protected:
 	PRINT_MODE		m_print_mode;
 	netSocket*		m_socket;
 	std::ostringstream	m_output;
-	#ifndef _MSC_VER
+    #if !(defined(_MSC_VER) || defined(__MINGW32__))
 	struct termios OldModes;
 	#endif
 };

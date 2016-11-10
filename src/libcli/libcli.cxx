@@ -31,7 +31,7 @@
 #include <server/fg_util.hxx>
 #include "libcli.hxx"
 
-#if defined(_MSC_VER) || defined(__CYGWIN__)
+#if defined(_MSC_VER) || defined(__MINGW32__) || defined(__CYGWIN__)
 	// some windows quick fixes
 #ifndef __CYGWIN__	
 	#define CTRL(a)  ( a & 037 )

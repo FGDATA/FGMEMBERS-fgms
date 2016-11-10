@@ -13,7 +13,7 @@
 #include    "fgt_common.h"
 #include    "fgt_error.h"
 #include    <stdarg.h>          /* ANSI C header file */ 
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 #define LOG_INFO 1
 #define LOG_ERR  2
 #define snprintf _snprintf
@@ -25,7 +25,7 @@ int     daemon_proc = 0;        /* set nonzero by server daemon_init() */
 
 void pgm_exit(int val)
 {
-#if defined(_MSC_VER) && !defined(NDEBUG)
+#if (defined(_MSC_VER)||defined(__MINGW32__)) && !defined(NDEBUG)
     int c;
     printf("Enter a key to exit...: ");
     c = getchar();
@@ -33,7 +33,7 @@ void pgm_exit(int val)
     exit(val);
 }
 
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 int syslog(int lev, char *fmt, ...) 
 {
     char    buf[MAXLINE + 1]; 
@@ -163,7 +163,7 @@ err_doit(int errnoflag, int level, const char *fmt, va_list ap)
 #endif 
     n = strlen(buf); 
     if (errnoflag) {
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
         // most likely came from a socket function error
         int err = WSAGetLastError();
         if (err) {  // got a socket error

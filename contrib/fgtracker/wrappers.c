@@ -53,7 +53,7 @@ int
 Fork()
 {
     int    n = -1;
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
     if ( (n = fork()) <0 )
 #endif
 	err_sys("fork error");

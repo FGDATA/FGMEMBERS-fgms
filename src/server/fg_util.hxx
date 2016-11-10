@@ -229,7 +229,7 @@ string NumToStr ( T n_Number, int n_Precision = 2, int n_Base = 10 )
 		else
 		{
 			n = n_Factor;
-#if defined(_MSC_VER) && (!defined(NTDDI_VERSION) || !defined(NTDDI_VISTA) || (NTDDI_VERSION < NTDDI_VISTA))   // if less than VISTA, provide alternative
+#if (defined(_MSC_VER)||defined(__MINGW32)) && (!defined(NTDDI_VERSION) || !defined(NTDDI_VISTA) || (NTDDI_VERSION < NTDDI_VISTA))   // if less than VISTA, provide alternative
 			n_WorkNumber = abs((int)n_WorkNumber);
 #else
 			n_WorkNumber = std::llabs(n_WorkNumber);

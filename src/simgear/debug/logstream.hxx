@@ -30,7 +30,7 @@
 
 #include <simgear/compiler.h>
 
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 #  include <windows.h>
 #endif
 
@@ -163,7 +163,7 @@ public:
 	*/
 	void set_sb ( streambuf* sb );
 
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 	static void has_no_console()
 	{
 		has_console = false;
@@ -186,7 +186,7 @@ private:
 
 	static bool logging_enabled;	// log to file
 	static bool console_enabled;	// log to console
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 	static bool has_console;
 #endif
 	static sgDebugClass logClass;
@@ -221,7 +221,7 @@ logbuf::set_log_state ( sgDebugClass c, sgDebugPriority p )
 inline logbuf::int_type
 logbuf::overflow ( int c )
 {
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 	if ( logging_enabled )
 	{
 		if ( !has_console )
@@ -404,7 +404,7 @@ sglog()
 # define SG_LOG(C,P,M) ::sglog() << ::loglevel(C,P) << M << std::endl
 # define SG_CONSOLE(C,P,M) ::sglog() << ::loglevel((sgDebugClass) (C|SG_CONSOLE),P) << ::sglog().datestr() << M << "\r\n";
 #else
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 # define SG_CONSOLE(C,P,M) sglog() << loglevel((sgDebugClass) (C|SG_CONSOLE),P) << sglog().datestr() << M << "\r\n"; \
     cerr << sglog().datestr() << M << "\r\n";
 # define SG_LOG(C,P,M) SG_CONSOLE(C,P,M)

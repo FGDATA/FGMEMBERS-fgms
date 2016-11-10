@@ -30,7 +30,7 @@ logstream* global_logstream = NULL;
 
 bool            logbuf::console_enabled = false;
 bool            logbuf::logging_enabled = true;
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 bool         logbuf::has_console = true;
 #endif
 sgDebugClass    logbuf::logClass        = SG_NONE;

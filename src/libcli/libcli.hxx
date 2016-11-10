@@ -23,7 +23,7 @@
 #include <string>
 #include <map>
 #include <stdarg.h>
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 	#include <termios.h>
 #endif
 #include "cli_client.hxx"
@@ -142,7 +142,7 @@ protected:
 	char*	cmd;		// content of current input line
 	string	username;	// login name of user
 	int	in_history;
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 	struct termios  OldModes;
 #endif
 };

@@ -24,8 +24,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <math.h>
-#ifndef _MSC_VER
-	#include <strings.h>
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
+    #include <strings.h>
 #endif // _MSC_VER
 #include <assert.h>
 #include "fg_geometry.hxx"

@@ -5,7 +5,7 @@
 	#include "config.h"
 #endif
 
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 	#ifndef __FreeBSD__
 		#include "error.h"
 	#endif

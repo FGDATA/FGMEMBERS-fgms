@@ -26,7 +26,7 @@
 // to become a daemon
 //
 //////////////////////////////////////////////////////////////////////
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>

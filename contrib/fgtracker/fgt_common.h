@@ -16,7 +16,7 @@
 #include "fgt_config.h"
 #include "fgt_error.h"
 
-#ifndef _MSC_VER
+#if !(defined(_MSC_VER) || defined(__MINGW32__))
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -221,7 +221,7 @@ struct sockaddr_storage {
 
 typedef void Sigfunc (int);     /* for signal handlers */ 
 
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 // #include <simgear/misc/stdint.hxx>
 typedef signed char      int8_t;
 typedef signed short     int16_t;

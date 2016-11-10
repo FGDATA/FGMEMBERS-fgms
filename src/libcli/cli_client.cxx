@@ -30,7 +30,7 @@
 #endif
 
 
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 	#include <conio.h> // for _kbhit(), _getch
 	#define kbhit	_kbhit
 	#define getchar	_getch
@@ -62,7 +62,7 @@ Client::Client
 	if (fd == fileno ( stdin ))
 	{	// setup terminal attributes
 		m_socket = 0;
-		#ifndef _MSC_VER
+        #if !(defined(_MSC_VER) || defined(__MINGW32__))
 			struct termios NewModes;
 			setbuf ( stdin, ( char* ) 0 );
 			(void) tcgetattr (fileno (stdin), &OldModes);
@@ -102,7 +102,7 @@ Client::~Client
 {
 	if (m_socket == 0)
 	{	// restore terminal attributes
-		#ifndef _MSC_VER
+        #if !(defined(_MSC_VER) || defined(__MINGW32__))
 		( void ) tcsetattr ( fileno ( stdin ), TCSANOW, &OldModes );
 		#endif
 	}
@@ -126,7 +126,7 @@ Client::wait_for_input
 	int seconds
 )
 {
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 	if (m_socket == 0)
 	{
 		return wait_for_key (seconds * 1000);

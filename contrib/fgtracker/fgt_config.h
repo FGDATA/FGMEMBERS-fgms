@@ -15,7 +15,7 @@
 #ifndef _fgt_config_h
 #define _fgt_config_h
 
-#ifdef _MSC_VER
+#if (defined(_MSC_VER) || defined(__MINGW32__))
 #include <Winsock2.h> /* NOTE: This ALSO includes <windows.h> */
 #include <sys/types.h>
 #include <sys/stat.h>
