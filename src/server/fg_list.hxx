@@ -152,10 +152,8 @@ public:
 	void   Clear ();
 	/** add an element to this list */
 	size_t Add   ( T& Element, time_t TTL );
-	/** Check if the entry TTL expired*/
-	bool CheckTTL (int position);
-	/** delete an element of this list (by position) */
-	void DeleteByPosition (int position);
+	/** Check entries for expired TTL */
+	void CheckTTL ();
 	/** delete an element of this list */
 	ListIterator Delete	( const ListIterator& Element );
 	/** find an element by its IP address */
@@ -249,7 +247,8 @@ mT_FG_List<T>::~mT_FG_List
  */
 template <class T>
 size_t
-mT_FG_List<T>::Size()
+mT_FG_List<T>::Size
+()
 {
 	return Elements.size ();
 }
@@ -265,7 +264,11 @@ mT_FG_List<T>::Size()
  */
 template <class T>
 size_t
-mT_FG_List<T>::Add( T& Element, time_t TTL)
+mT_FG_List<T>::Add
+(
+	T& Element,
+	time_t TTL
+)
 {
 	this->MaxID++;
 	Element.ID	= this->MaxID;
@@ -277,19 +280,6 @@ mT_FG_List<T>::Add( T& Element, time_t TTL)
 }
 //////////////////////////////////////////////////////////////////////
 
-
-template <class T>
-void 
-mT_FG_List<T>::DeleteByPosition (int position)
-{
-	pthread_mutex_lock ( & m_ListMutex );
-	ListIterator Element;
-	this->LastRun = time (0);
-	Element = Elements.begin();
-	std::advance (Element,position);
-	Elements.erase   ( Element );
-	pthread_mutex_unlock ( & m_ListMutex );
-}
 //////////////////////////////////////////////////////////////////////
 /** thread safe
  *
@@ -298,7 +288,10 @@ mT_FG_List<T>::DeleteByPosition (int position)
  */
 template <class T>
 typename vector<T>::iterator
-mT_FG_List<T>::Delete( const ListIterator& Element)
+mT_FG_List<T>::Delete
+(
+	const ListIterator& Element
+)
 {
 	ListIterator E;
 	pthread_mutex_lock   ( & m_ListMutex );
@@ -321,7 +314,11 @@ mT_FG_List<T>::Delete( const ListIterator& Element)
  */
 template <class T>
 typename vector<T>::iterator
-mT_FG_List<T>::Find( const netAddress& Address, const string& Name)
+mT_FG_List<T>::Find
+(
+	const netAddress& Address,
+	const string& Name
+)
 {
 	ListIterator Element;
 	ListIterator RetElem;
@@ -382,7 +379,10 @@ mT_FG_List<T>::Find( const netAddress& Address, const string& Name)
  */
 template <class T>
 typename vector<T>::iterator
-mT_FG_List<T>::FindByName( const string& Name)
+mT_FG_List<T>::FindByName
+(
+	const string& Name
+)
 {
 	ListIterator Element;
 	ListIterator RetElem;
@@ -414,7 +414,9 @@ mT_FG_List<T>::FindByName( const string& Name)
 template <class T>
 typename vector<T>::iterator
 mT_FG_List<T>::FindByID
-( size_t ID )
+(
+	size_t ID
+)
 {
 	ListIterator Element;
 	ListIterator RetElem;
@@ -445,7 +447,8 @@ mT_FG_List<T>::FindByID
  */
 template <class T>
 typename vector<T>::iterator
-mT_FG_List<T>::Begin()
+mT_FG_List<T>::Begin
+()
 {
 	return Elements.begin ();
 }
@@ -458,7 +461,8 @@ mT_FG_List<T>::Begin()
  */
 template <class T>
 typename vector<T>::iterator
-mT_FG_List<T>::End()
+mT_FG_List<T>::End
+()
 {
 	return Elements.end ();
 }
@@ -473,7 +477,8 @@ mT_FG_List<T>::End()
  */
 template <class T>
 void
-mT_FG_List<T>::Lock()
+mT_FG_List<T>::Lock
+()
 {
 	pthread_mutex_lock ( & m_ListMutex );
 }
@@ -486,7 +491,8 @@ mT_FG_List<T>::Lock()
  */
 template <class T>
 void
-mT_FG_List<T>::Unlock()
+mT_FG_List<T>::Unlock
+()
 {
 	pthread_mutex_unlock ( & m_ListMutex );
 }
@@ -494,37 +500,39 @@ mT_FG_List<T>::Unlock()
 
 //////////////////////////////////////////////////////////////////////
 /** thread safe
- * Check if the elements have TTL expired. 
- * True if not expired/unknown. False if expired.
+ * Check entries for expired TTL. All expired entries are removed
+ * from the list.
  */
 template <class T>
-bool
-mT_FG_List<T>::CheckTTL( int position )
+void
+mT_FG_List<T>::CheckTTL
+()
 {
 	pthread_mutex_lock ( & m_ListMutex );
 	ListIterator Element;
 	this->LastRun = time (0);
 	Element = Elements.begin();
-	std::advance (Element,position);
-
-	if (Element->Timeout == 0)
-	{	// never timeouts
-		pthread_mutex_unlock ( & m_ListMutex );
-		return true;
-	}
-	if ( (this->LastRun - Element->LastSeen) > Element->Timeout )
+	while (Element != Elements.end())
 	{
-		SG_LOG ( SG_FGMS, SG_INFO,
-		  this->Name << ": TTL exceeded for "
-		  << Element->Name << " "
-		  << Element->Address.getHost() << " "
-		  << "after " << diff_to_days (Element->LastSeen - Element->JoinTime)
-		  );
-		  pthread_mutex_unlock ( & m_ListMutex );
-		  return false;
+		if (Element->Timeout == 0)
+		{	// never timeouts
+			Element++;
+			continue;
+		}
+		if ( (this->LastRun - Element->LastSeen) > Element->Timeout )
+		{
+			SG_LOG ( SG_FGMS, SG_INFO,
+			  this->Name << ": TTL exceeded for "
+			  << Element->Name << " "
+			  << Element->Address.getHost() << " "
+			  << "after " << diff_to_days (Element->LastSeen - Element->JoinTime)
+			  );
+			Element = Elements.erase (Element);
+			continue;
+		}
+		Element++;
 	}
 	pthread_mutex_unlock ( & m_ListMutex );
-	return true;
 }
 //////////////////////////////////////////////////////////////////////
 
@@ -538,7 +546,10 @@ mT_FG_List<T>::CheckTTL( int position )
  */
 template <class T>
 T
-mT_FG_List<T>::operator []( const size_t& Index )
+mT_FG_List<T>::operator []
+(
+	const size_t& Index
+)
 {
 	T RetElem("");
 //	pthread_mutex_lock ( & m_ListMutex );
@@ -642,7 +653,8 @@ mT_FG_List<T>::UpdateRcvd
  */
 template <class T>
 void
-mT_FG_List<T>::Clear()
+mT_FG_List<T>::Clear
+()
 {
 	Lock ();
 	Elements.clear ();

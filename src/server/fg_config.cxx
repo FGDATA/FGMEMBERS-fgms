@@ -77,7 +77,10 @@ FG_CONFIG::Read
  * @retval string - with contents of variable, or blank string if not found
 */
 std::string
-FG_CONFIG::Get( const std::string &VarName)
+FG_CONFIG::Get
+(
+	const std::string &VarName
+)
 {
 	m_CurrentVar = m_VarList.begin();
 	while (m_CurrentVar != m_VarList.end())
@@ -98,7 +101,8 @@ FG_CONFIG::Get( const std::string &VarName)
  * @brief Set internal pointer to the first variable in list
  */
 void
-FG_CONFIG::SetStart()
+FG_CONFIG::SetStart
+()
 {
 	m_CurrentVar = m_VarList.begin();
 } // FG_CONFIG::SetStart ()
@@ -110,7 +114,8 @@ FG_CONFIG::SetStart()
  * @retval int 1 for success, else 0
  */
 int
-FG_CONFIG::Next()
+FG_CONFIG::Next
+()
 {
 	if (m_CurrentVar == m_VarList.end())
 	{
@@ -132,7 +137,8 @@ FG_CONFIG::Next()
  * @retval string The variable name, or empty string if not found.
  */
 std::string
-FG_CONFIG::GetName()
+FG_CONFIG::GetName
+()
 {
 	if (m_CurrentVar != m_VarList.end())
 	{
@@ -149,7 +155,8 @@ FG_CONFIG::GetName()
  * \retval string The variable name, or empty string if not found.
  */
 std::string
-FG_CONFIG::GetValue()
+FG_CONFIG::GetValue
+()
 {
 	if (m_CurrentVar != m_VarList.end())
 	{
@@ -168,7 +175,10 @@ FG_CONFIG::GetValue()
  * @retval int 1 on success, else 0
  */
 int
-FG_CONFIG::SetSection( const std::string &SecName )
+FG_CONFIG::SetSection
+(
+	const std::string &SecName
+)
 {
 	SetStart ();
 	while (m_CurrentVar != m_VarList.end())
@@ -191,7 +201,8 @@ FG_CONFIG::SetSection( const std::string &SecName )
  * @retval int 1 on success, 0 else
  */
 int
-FG_CONFIG::SecNext()
+FG_CONFIG::SecNext
+()
 {
 	if (!Next())
 	{

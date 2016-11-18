@@ -76,7 +76,7 @@
 	}
 	#define RECOVERABLE_ERROR recoverable_wsa_error()
 #else
-	#define RECOVERABLE_ERROR (errno == EINTR || errno == EAGAIN || errno == EWOULDBLOCK )
+	#define RECOVERABLE_ERROR (errno == EINTR)
 	#define SOCKET_ERROR -1
 #endif
 

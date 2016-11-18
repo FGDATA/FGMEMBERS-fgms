@@ -200,11 +200,6 @@ ProcessConfig ( const string& ConfigName )
 	{
 		Servant.SetBindAddress ( Val );
 	}
-	Val = Config.Get ( "server.domain" );
-	if ( Val != "" )
-	{
-		Servant.Setdomain ( Val );
-	}
 	Val = Config.Get ( "server.port" );
 	if ( Val != "" )
 	{
